@@ -1,0 +1,60 @@
+﻿マージ可能ヒープ
+MakeHeap(A)
+Union(A1，A2)
+
+二項木
+二項木 Bk は次のように再帰的に定義される順序木である．
+B0 は節点1つだけからなる
+Bk は2つの Bk-1 からなるのだが，このとき2つの二項木は，一方の根がもう一方の根の最左の子として連結される．
+
+補題
+2^k 個の節点をもつ
+k は二項木の高さである
+高さ i の節点数は kCi である
+節点数 n 個の二項木がもつ節点の最大次数は lg n である
+
+二項ヒープ条件
+・二項木の集合 H にある全ての二項木は最小ヒープ条件を満たす
+・任意の非負整数 k があって，根の次数が k である二項木は H の中に1つしか存在しない．
+
+p[x] 親の参照
+key[x] キー値の参照
+child[x] 直接の子の参照
+sibling[x] 直接の右隣の兄弟の参照を返す．x が右端のときはNILを返す
+degree[x] 節点 x の次数
+head[H] 根リストの先頭の根を参照する．2項ヒープが要素を含まないときはNILを返す
+
+
+Minimum(H)
+y = NIL
+x = head[H]
+min = ∞
+while x ≠ NIL
+    do if (key[x] < min)
+        then min = key[x]
+               y = x
+         x = sibling[x]
+return y
+
+Link(y，smallest)
+p[y] = smallest
+sibling[y] = child[smallest]
+child[smallest] = y
+degree[smallest] += 1
+
+Union(H1，H2)
+H = MakeHeap()
+next = head[H]
+while next ≠ NIL
+    if (degree[current] ≠ degree[next]) または (sibling[next] ≠ NIL かつ degree[current] = degree[sibling[next]])
+        then prev = current
+               current = next
+        else if (degree[current] <= degree[next])
+             then Link(next，current)
+                    sibling[current] = sibling[next]
+             else if (prev[current] = NIL)
+                  then head[H] = next
+                         Link(current，next)
+                         current = next
+         next = sibling[current]
+return H
