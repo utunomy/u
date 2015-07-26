@@ -1,1 +1,105 @@
-﻿
+﻿ヒープとは
+優先度つき待ち行列 (優先度つきキュー) とかソートアルゴリズムに用いられる抽象データ型 (ADT)
+おもなもの
+二分ヒープ
+二項ヒープ
+フィボナッチヒープ
+
+二分ヒープ
+＜図．二分木＞
+おおよそ完全二分木
+
+二項ヒープ
+＜図．二項木＞
+二項木の集合
+ヒープの素早いマージ操作をサポートする
+
+フィボナッチヒープ
+＜図．二項木+＞
+二項ヒープよりならし実行時間が短い
+最短経路問題に対し処理速度が改善されている
+
+ヒープ条件
+次のようなルールを最小ヒープ条件と呼ぶ
+あるノードの子は親の値より大きな値をもつ．したがって根が最小値である
+(大小関係が最小ヒープ条件と逆さまのものを最大ヒープ条件と呼ぶ)
+＜図．最小ヒープ　最大ヒープ＞
+
+二分ヒープ
+次の2つの条件からなる二分木
+・ヒープ条件
+・葉は同じ高さで左から加える
+ここからしばらくは最小ヒープを考える
+
+ガウス記号
+Floor(i)　i を切り下げる 床関数
+Ceil(i)　i を切り上げる 天井関数
+
+最小ヒープ
+＜図．ツリー　配列＞
+Parent(i)： f(i/2)　親の添え字
+Left(i)： 2i　左の子の添え字
+Right(i)： 2i + 1　右の子の添え字
+高さ： O(lg n)
+Length[A]： 配列の長さ
+HeapSize[A]　ヒープの容量．A[HeapSize[A]] ＜ A[i] は最小ヒープの要素ではない
+
+次の操作によってヒープソーティングを実現できる
+Heapify(A，i)　O(lg n) ノード i のヒープ条件を再帰的に検査し必要ならヒープ操作を行う
+BuildHeap(A)　O(n) 配列 A をヒープにする
+ノードの値と最小値に対し， Length[A] から降順で，「交換する + HeapSizeを1つ下げる」操作を繰り返す．
+根の1個手前で操作を終了し，ソーティングは完成している．
+
+Heapify(A，i)
+if i > HeapSize[A] 
+    then ヒープサイズ・オーバーフロー
+l = Left(i)
+r = Right(i)
+if A[i] > A[l]
+    then smallest = l
+    else smallest = i
+if A[smallest] > A[r]
+    then smallest = r
+if smallest ≠ i 
+    then 値の交換 A[smallest] ⇔ A[i]
+    then Heapify(A，smallest)
+
+Heapify の動作
+＜図．Heapifyの動作＞
+
+BuildHeap(A)
+HeapSize[A] = Length[A]
+for i = Floor(Length[A]/2) downto 1
+    do Heapify(A，i)
+実行時間 Σ[h=0，lg n] n/2^[h+1]O(h) = O(n)
+
+優先度つきキューの操作
+TakeMin(A)　O(lg n) 最小値をもつノード (根) を取り除き値を返す
+DecreaseKey(i)　O(lg n) ノード i を元の値よりも小さい値にする
+Insert(A，key)　O(lg n) ノードを新たに挿入する
+Delete(i)　O(lg n) ノード i をヒープから削除する
+
+TakeMin(A)
+min = A[1]
+値の交換 A[1] ⇔ A[HeapSize[A]]
+HeapSize[A] -= 1
+Heapify(A，1)
+return min
+
+DecreaseKey(A，i，key)
+if A[i] < key 
+    then key が i の値よりも大きい
+A[i] = key
+while i > 1 かつ key < A[Parent(i)]
+    then 値の交換 A[i] ⇔ A[Parent(i)]
+    then i = Parent(i)
+
+Insert(A，key)
+A[HeapSize[A] + 1] = ∞
+HeapSize += 1
+DecreaseKey(A，HeapSize[A]，key)
+
+Delete(A，i)
+DecreaseKey(A，i，-∞)
+TakeMin(A)
+
