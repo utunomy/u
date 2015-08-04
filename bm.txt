@@ -1,0 +1,91 @@
+﻿  ab[c]
+  ab[z]abc
+   head : +3
+  ab[c]
+  abzab[c]
+  テキスト4文字目にパターンの先頭をもってくる
+
+  ab[c]
+  ab[a]bcd
+    head : +2
+  ab[c]
+  abab[c]d
+  テキスト3文字目にパターンの同じ文字をもってくる
+
+  ab[c]
+  xx[b]bcd
+   head : +1
+  ab[c]
+  xxb[b]cd
+  テキスト3文字目にパターンの同じ文字をもってくる
+
+  ab[c]ab
+  ab[z]abcab
+   head : +1
+  abca[b]
+  abzabca[b]
+  テキストの4文字目にパターンの先頭をもってくる
+
+  abca[b]
+  aabc[a]bcab
+   head : +1
+  abca[b]
+  aabca[b]cab
+  テキストの5文字目にパターンの同じ文字 (最右) をもってくる
+
+  a[b]cde
+  xxx[d]cde
+   head : -2
+  abcd[e]
+  xxxd[c]de
+   head : +2
+  abcd[e]
+  xxxdcd[e]
+・・・ 無限ループ ・・・
+
+  a[b]cde
+  xxx[d]cdef
+   head : -2 同値が注目点の右側ならば次の処理を実行する
+   head : +1
+  abcd[e]
+  xxxdcde[f]
+
+  011[1]
+  111[1]
+   success
+  01[1]1
+  11[1]1
+   success
+  0[1]11
+  1[1]11
+   success
+  [0]111
+  [1]111
+   head : +1
+  011[1]
+  1111[1]
+   success
+  01[1]1
+  111[1]1
+   success
+  0[1]11
+  11[1]11
+   success
+  [0]111
+  1[1]111
+
+  [t]atr
+  [t]ata
+   success
+  t[a]tr
+  t[a]ta
+   success
+  ta[t]r
+  ta[t]a
+   success
+  tat[r]
+  tat[a]
+   next[3] : +2
+  [t]atr
+  ta[t]a
+
